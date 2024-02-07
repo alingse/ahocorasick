@@ -37,7 +37,10 @@ func TestBuild(t *testing.T) {
 	}
 
 	m := new(Machine)
-	m.Build(keywords)
+	err = m.Build(keywords)
+	if err != nil {
+		t.Error(err)
+	}
 	//m.PrintFailure()
 	//m.PrintOutput()
 }
@@ -49,7 +52,10 @@ func TestMultiPatternSearchEnglish(t *testing.T) {
 		t.Error(err)
 	}
 	m := new(Machine)
-	m.Build(keywords)
+	err = m.Build(keywords)
+	if err != nil {
+		t.Error(err)
+	}
 	//m.PrintFailure()
 	//m.PrintOutput()
 
@@ -68,7 +74,10 @@ func TestMultiPatternSearchChinese(t *testing.T) {
 		t.Error(err)
 	}
 	m := new(Machine)
-	m.Build(keywords)
+	err = m.Build(keywords)
+	if err != nil {
+		t.Error(err)
+	}
 	//m.PrintFailure()
 	//m.PrintOutput()
 
@@ -87,7 +96,10 @@ func TestExactSearchEnglish(t *testing.T) {
 		t.Error(err)
 	}
 	m := new(Machine)
-	m.Build(keywords)
+	err = m.Build(keywords)
+	if err != nil {
+		t.Error(err)
+	}
 
 	for _, k := range keywords {
 		if m.ExactSearch(k) == nil {
@@ -104,7 +116,10 @@ func TestExactSearchChinese(t *testing.T) {
 		t.Error(err)
 	}
 	m := new(Machine)
-	m.Build(keywords)
+	err = m.Build(keywords)
+	if err != nil {
+		t.Error(err)
+	}
 
 	for _, k := range keywords {
 		if m.ExactSearch(k) == nil {
