@@ -131,8 +131,8 @@ func (m *Machine) setF(inState, outState int) {
 	m.failure[inState] = outState
 }
 
-func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) [](*Term) {
-	terms := make([](*Term), 0)
+func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) []Term {
+	var terms []Term
 
 	state := ROOT_STATE
 	for pos, c := range content {
@@ -144,7 +144,7 @@ func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) [](
 			state = m.g(state, c)
 			if val, ok := m.output[state]; ok {
 				for _, word := range val {
-					term := new(Term)
+					var term Term
 					term.Pos = pos - len(word) + 1
 					term.Word = word
 					terms = append(terms, term)
@@ -159,12 +159,12 @@ func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) [](
 	return terms
 }
 
-func (m *Machine) ExactSearch(content []rune) [](*Term) {
+func (m *Machine) ExactSearch(content []rune) []Term {
 	if m.trie.ExactMatchSearch(content, 0) {
-		t := new(Term)
+		var t Term
 		t.Word = content
 		t.Pos = 0
-		return [](*Term){t}
+		return []Term{t}
 	}
 
 	return nil
