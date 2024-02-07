@@ -63,9 +63,10 @@ func (m *Machine) Build(keywords [][]rune) (err error) {
 				goto set_state
 			}
 			if _, ok := m.output[outState]; ok {
-				copyOutState := make([][]rune, 0, len(m.output[outState]))
+				copyOutState := make([][]rune, 0, len(m.output[outState])+len(m.output[n.Base]))
 				copyOutState = append(copyOutState, m.output[outState]...)
-				m.output[n.Base] = append(copyOutState, m.output[n.Base]...)
+				copyOutState = append(copyOutState, m.output[n.Base]...)
+				m.output[n.Base] = copyOutState
 			}
 			m.setF(n.Base, outState)
 		}
