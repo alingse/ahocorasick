@@ -5,13 +5,10 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"time"
-)
 
-import (
-	"github.com/anknown/ahocorasick"
+	goahocorasick "github.com/anknown/ahocorasick"
 	"github.com/cloudflare/ahocorasick"
 )
 
@@ -73,7 +70,7 @@ func TestAEnglish() {
 		return
 	}
 
-	content, err := ioutil.ReadFile(ENG_TEXT_FILE)
+	content, err := os.ReadFile(ENG_TEXT_FILE)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -109,7 +106,7 @@ func TestAChinese() {
 		return
 	}
 
-	content, err := ioutil.ReadFile(CHN_TEXT_FILE)
+	content, err := os.ReadFile(CHN_TEXT_FILE)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -145,7 +142,7 @@ func TestBEnglish() {
 		return
 	}
 
-	content, err := ioutil.ReadFile(ENG_TEXT_FILE)
+	content, err := os.ReadFile(ENG_TEXT_FILE)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -184,7 +181,7 @@ func TestBChinese() {
 		return
 	}
 
-	content, err := ioutil.ReadFile(CHN_TEXT_FILE)
+	content, err := os.ReadFile(CHN_TEXT_FILE)
 	if err != nil {
 		fmt.Println(err)
 		return

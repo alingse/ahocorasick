@@ -2,10 +2,8 @@ package goahocorasick
 
 import (
 	"fmt"
-)
 
-import (
-	"github.com/anknown/darts"
+	godarts "github.com/anknown/darts"
 )
 
 const FAIL_STATE = -1
@@ -29,7 +27,7 @@ func (m *Machine) Build(keywords [][]rune) (err error) {
 
 	d := new(godarts.Darts)
 
-	trie := new(godarts.LinkedListTrie)
+	var trie *godarts.LinkedListTrie
 	m.trie, trie, err = d.Build(keywords)
 	if err != nil {
 		return err
@@ -64,12 +62,11 @@ func (m *Machine) Build(keywords [][]rune) (err error) {
 				inState = m.f(inState)
 				goto set_state
 			}
-			if _, ok := m.output[outState]; ok != false {
-				copyOutState := make([][]rune, 0)
-				for _, o := range m.output[outState] {
-					copyOutState = append(copyOutState, o)
-				}
-				m.output[n.Base] = append(copyOutState, m.output[n.Base]...)
+			if _, ok := m.output[outState]; ok {
+				copyOutState := make([][]rune, 0, len(m.output[outState])+len(m.output[n.Base]))
+				copyOutState = append(copyOutState, m.output[outState]...)
+				copyOutState = append(copyOutState, m.output[n.Base]...)
+				m.output[n.Base] = copyOutState
 			}
 			m.setF(n.Base, outState)
 		}
@@ -135,8 +132,8 @@ func (m *Machine) setF(inState, outState int) {
 	m.failure[inState] = outState
 }
 
-func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) [](*Term) {
-	terms := make([](*Term), 0)
+func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) []Term {
+	var terms []Term
 
 	state := ROOT_STATE
 	for pos, c := range content {
@@ -146,9 +143,9 @@ func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) [](
 			goto start
 		} else {
 			state = m.g(state, c)
-			if val, ok := m.output[state]; ok != false {
+			if val, ok := m.output[state]; ok {
 				for _, word := range val {
-					term := new(Term)
+					var term Term
 					term.Pos = pos - len(word) + 1
 					term.Word = word
 					terms = append(terms, term)
@@ -163,12 +160,12 @@ func (m *Machine) MultiPatternSearch(content []rune, returnImmediately bool) [](
 	return terms
 }
 
-func (m *Machine) ExactSearch(content []rune) [](*Term) {
+func (m *Machine) ExactSearch(content []rune) []Term {
 	if m.trie.ExactMatchSearch(content, 0) {
-		t := new(Term)
+		var t Term
 		t.Word = content
 		t.Pos = 0
-		return [](*Term){t}
+		return []Term{t}
 	}
 
 	return nil
